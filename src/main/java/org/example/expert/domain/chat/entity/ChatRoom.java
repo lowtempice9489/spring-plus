@@ -1,9 +1,6 @@
 package org.example.expert.domain.chat.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.expert.domain.common.entity.Timestamped;
@@ -17,6 +14,7 @@ public class ChatRoom extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 10)
     private String name;
 
     public ChatRoom(String name) {

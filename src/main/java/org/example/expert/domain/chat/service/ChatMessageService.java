@@ -59,7 +59,7 @@ public class ChatMessageService {
 
         List<ChatMessage> messages =
                 chatMessageRepository
-                        .findTop10ByChatRoomIdAndSentAtAfterOrderBySentAtDesc(
+                        .findTop10ByChatRoomIdAndSentAtGreaterThanEqualOrderBySentAtDesc(
                                 roomId,
                                 oneHourAgo
                         );

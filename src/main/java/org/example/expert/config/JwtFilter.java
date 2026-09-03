@@ -35,8 +35,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String bearerJwt = request.getHeader("Authorization");
 
-        // 토큰이 없는 경우 인증 객체를 만들지 않고
-        // 이후 Spring Security가 접근 권한을 판단하도록 넘긴다.
         if (bearerJwt == null) {
             filterChain.doFilter(request, response);
             return;
@@ -69,14 +67,13 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext()
                     .setAuthentication(authentication);
 
-            filterChain.doFilter(request, response);
-
         } catch (SecurityException | MalformedJwtException e) {
             log.error("Invalid JWT signature", e);
             response.sendError(
                     HttpServletResponse.SC_UNAUTHORIZED,
                     "유효하지 않는 JWT 서명입니다."
             );
+            return;
 
         } catch (ExpiredJwtException e) {
             log.error("Expired JWT token", e);
@@ -84,6 +81,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     HttpServletResponse.SC_UNAUTHORIZED,
                     "만료된 JWT 토큰입니다."
             );
+            return;
 
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT token", e);
@@ -91,6 +89,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     HttpServletResponse.SC_BAD_REQUEST,
                     "지원되지 않는 JWT 토큰입니다."
             );
+            return;
 
         } catch (Exception e) {
             log.error("JWT authentication error", e);
@@ -98,6 +97,9 @@ public class JwtFilter extends OncePerRequestFilter {
                     HttpServletResponse.SC_BAD_REQUEST,
                     "잘못된 JWT 토큰입니다."
             );
+            return;
         }
+
+        filterChain.doFilter(request, response);
     }
 }

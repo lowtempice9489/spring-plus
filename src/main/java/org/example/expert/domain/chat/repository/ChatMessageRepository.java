@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 
-    List<ChatMessage> findTop10ByChatRoomIdAndSentAtAfterOrderBySentAtDesc(
+    List<ChatMessage> findTop10ByChatRoomIdAndSentAtGreaterThanEqualOrderBySentAtDesc(
             Long chatRoomId, LocalDateTime sentAt
     );
 }

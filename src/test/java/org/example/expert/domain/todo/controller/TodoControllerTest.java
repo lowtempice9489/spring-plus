@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @WebMvcTest(TodoController.class)
 class TodoControllerTest {
@@ -52,7 +53,10 @@ class TodoControllerTest {
         when(todoService.getTodo(todoId)).thenReturn(response);
 
         // then
-        mockMvc.perform(get("/todos/{todoId}", todoId))
+        mockMvc.perform(
+                        get("/todos/{todoId}", todoId)
+                                .with(user("test-user").roles("USER"))
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(todoId))
                 .andExpect(jsonPath("$.title").value(title));
@@ -68,7 +72,10 @@ class TodoControllerTest {
                 .thenThrow(new InvalidRequestException("Todo not found"));
 
         // then
-        mockMvc.perform(get("/todos/{todoId}", todoId))
+        mockMvc.perform(
+                        get("/todos/{todoId}", todoId)
+                                .with(user("test-user").roles("USER"))
+                )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name()))
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))

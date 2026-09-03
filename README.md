@@ -1,5 +1,26 @@
 # SPRING PLUS
 
+## 구현 범위
+
+- Level 1
+    - @Transactional 저장 오류 수정
+    - User nickname 추가 및 JWT Claim 반영
+    - JPQL 기반 weather / 수정일 기간 검색
+    - Todo Controller 테스트 수정
+    - 관리자 권한 변경 AOP 수정
+
+- Level 2
+    - JPA Cascade를 활용한 Todo 작성자 담당자 자동 등록
+    - Comment 조회 N+1 개선
+    - findByIdWithUser QueryDSL 전환 및 N+1 개선
+    - Spring Security 기반 JWT 인증/인가 전환
+
+- Level 3
+    - QueryDSL + Projection + Paging 일정 검색 API
+    - REQUIRES_NEW를 이용한 매니저 요청 로그 독립 트랜잭션
+    - 익명 WebSocket/STOMP 실시간 채팅
+    - 100만 User JDBC Batch Insert 및 nickname 조회 성능 개선
+
 ## 대용량 데이터 처리 및 조회 성능 개선
 
 ### 1. 목표
@@ -113,7 +134,7 @@ Table scan on users
 rows=1e+6
 ```
 
-반복 측정 결과 실제 실행 시간은 대략 **225~228ms 수준**이었습니다.
+반복 측정 결과 실제 실행 시간은 대략 **평균 약 367.6ms 수준**이었습니다.
 
 즉 닉네임 하나를 찾기 위해 약 100만 건의 데이터를 탐색해야 했습니다.
 
@@ -189,8 +210,8 @@ Covering index lookup on users using idx_users_nickname_email
 ### 7. 조회 성능 비교
 
 | 단계        | 조회 방식                   | 실행 계획                 | 측정 시간         |
-| --------- | ----------------------- | --------------------- | ------------- |
-| 최초 조회     | 인덱스 없음                  | Table Scan            | 약 225~228ms   |
+|-----------|-------------------------|-----------------------|---------------|
+| 최초 조회     | 인덱스 없음                  | Table Scan            | 평균 약 367.6ms  |
 | 1차 최적화    | nickname 단일 인덱스         | Index Lookup          | 약 0.02~0.04ms |
 | 2차 최적화 실험 | nickname + email 복합 인덱스 | Covering Index Lookup | 약 0.02~0.03ms |
 

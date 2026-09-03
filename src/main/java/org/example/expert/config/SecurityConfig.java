@@ -52,7 +52,10 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/chat-test.html").permitAll()
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/ws", "/ws/**").permitAll()
+                        .requestMatchers("/chat/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

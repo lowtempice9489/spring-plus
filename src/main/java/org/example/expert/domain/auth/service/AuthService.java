@@ -35,6 +35,10 @@ public class AuthService {
 
         UserRole userRole = UserRole.of(signupRequest.getUserRole());
 
+        if (userRole != UserRole.USER) {
+            throw new InvalidRequestException("회원가입 시 USER 권한만 선택할 수 있습니다.");
+        }
+
         User newUser = new User(
                 signupRequest.getEmail(),
                 encodedPassword,

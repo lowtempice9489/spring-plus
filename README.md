@@ -100,7 +100,6 @@ GET /users/search?nickname={nickname}
 [
   {
     "id": 500000,
-    "email": "dummy500000@test.local",
     "nickname": "딸기4ae4z_1"
   }
 ]

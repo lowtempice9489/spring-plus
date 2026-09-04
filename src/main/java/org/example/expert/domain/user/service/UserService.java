@@ -56,7 +56,6 @@ public class UserService {
         return userRepository.findAllByNickname(nickname).stream()
                 .map(user -> new UserSearchResponse(
                         user.getId(),
-                        user.getEmail(),
                         user.getNickname()
                 ))
                 .toList();
